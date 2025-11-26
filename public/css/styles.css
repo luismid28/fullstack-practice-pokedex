@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #FFCC00, #FF4444);
+    background: linear-gradient(135deg, #ffcd06, #11130a);
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -27,7 +27,7 @@ input, button {
 }
 
 input {
-    border: 2px solid #E60013;
+    border: 2px solid #76db65;
 }
 
 button {
@@ -37,6 +37,14 @@ button {
     cursor: pointer;
 }
 
+.input-formulario{
+     border: 2px solid #0013e6;
+
+}
+.otra-clase{
+    background-color: #e37bc9;
+    border: 2px solid black;
+}
 #pokemon-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
