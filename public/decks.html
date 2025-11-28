@@ -19,7 +19,7 @@
 
     <main>
         <section class="grid-container">
-          <h2>Galería de botones</h2>
+          <h2>Galería de Pokémon</h2>
           <div id="grid-buttons" class="grid-buttons">
             <!-- Los botones de la cuadrícula se generan por JS -->
           </div>
@@ -121,12 +121,80 @@
 
       // Generar botones de la cuadricula con Pokémon de ejemplo
       const gridContainer = document.getElementById('grid-buttons');
-      MOCK_POKEMON.forEach((pokemon) => {
+
+      // Helper para crear un "grid item" con botón (solo imagen) y etiqueta debajo
+      function createGridItem({ imgSrc, name, id }) {
+        const item = document.createElement('div');
+        item.className = 'grid-item';
+        item.style.display = 'flex';
+        item.style.flexDirection = 'column';
+        item.style.alignItems = 'center';
+        item.style.gap = '6px';
+
         const btn = document.createElement('button');
         btn.className = 'grid-button';
-        btn.innerHTML = `<span style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; height: 100%; justify-content: center;"><img src="${pokemon.sprite}" style="width: 40px; height: 40px; image-rendering: pixelated;" alt="${pokemon.nombre}"><span style="font-size: 0.6em;">${pokemon.nombre}</span></span>`;
-        gridContainer.appendChild(btn);
+        btn.style.display = 'flex';
+        btn.style.alignItems = 'center';
+        btn.style.justifyContent = 'center';
+        btn.style.padding = '0';
+        btn.style.width = '100%';
+        btn.style.height = 'auto';
+
+        const img = document.createElement('img');
+        img.src = imgSrc || '';
+        img.alt = name || '';
+        img.style.width = '60%';
+        img.style.height = 'auto';
+        img.style.imageRendering = 'pixelated';
+        btn.appendChild(img);
+
+        const label = document.createElement('div');
+        label.className = 'grid-label';
+        label.textContent = name ? String(name).toLowerCase() : '';
+        label.style.fontSize = '0.9rem';
+        label.style.textTransform = 'capitalize';
+
+        item.appendChild(btn);
+        item.appendChild(label);
+
+        return item;
+      }
+
+      // Poblamos con MOCK_POKEMON primero
+      MOCK_POKEMON.forEach((pokemon) => {
+        const item = createGridItem({ imgSrc: pokemon.sprite, name: pokemon.nombre, id: pokemon.id });
+        gridContainer.appendChild(item);
       });
+
+      // --- Nuevo: cargar Pokémon desde la API y mostrar igual (imagen en botón + nombre abajo) ---
+      async function loadGridFromApi(limit = 24) {
+        const API_BASE = "https://pokeapi.co/api/v2";
+        const grid = document.getElementById("grid-buttons");
+        grid.innerHTML = "Cargando Pokémon...";
+
+        try {
+          const resList = await fetch(`${API_BASE}/pokemon?limit=${limit}`);
+          const dataList = await resList.json();
+
+          // traer detalles en paralelo
+          const details = await Promise.all(
+            dataList.results.map(r => fetch(r.url).then(res => res.json()))
+          );
+
+          grid.innerHTML = "";
+          details.forEach(data => {
+            const img = (data.sprites && (data.sprites.other?.["official-artwork"]?.front_default || data.sprites.front_default)) || "";
+            const item = createGridItem({ imgSrc: img, name: data.name, id: data.id });
+            grid.appendChild(item);
+          });
+        } catch (err) {
+          grid.innerHTML = "Error cargando Pokémon";
+          console.error(err);
+        }
+      }
+
+      // Ejecutar carga al iniciar (comentario: si quieres mantener MOCK_POKEMON, comenta la siguiente línea)
+      loadGridFromApi(24);
     </script>
 
 </body>
