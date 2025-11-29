@@ -77,12 +77,12 @@ body::-webkit-scrollbar {
 }
 
 :root {
-  /* Forma de carta de póker: altura el doble que anchura */
-  --btn-width: 100px;
-  --btn-height: 200px; /* altura = anchura × 2 */
+  --btn-width: 140px;
+  --btn-height: 260px;
+  --img-size: 150px;
   --btn-font-size: calc(0.9rem + (1.4 - 0.9) * ((100vw - 320px) / (1920 - 320)));
-  --img-size: calc(50px + (110 - 50) * ((100vw - 320px) / (1920 - 320)));
 }
+
 
 /* Flexbox en lugar de grid: se acomoda pero sin estructura rígida */
 .grid-buttons {

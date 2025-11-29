@@ -29,7 +29,7 @@
     <script>
       // Configuración: cambia estos valores si quieres más/menos botones
       const HEADER_COUNT = 8;   // botones en el header
-      const GRID_COUNT = 60;    // botones en la cuadricula
+      const GRID_COUNT = 151;    // botones en la cuadricula
 
       // Mazos de ejemplo (del mock)
       const MOCK_DECKS = [
@@ -166,35 +166,66 @@
         gridContainer.appendChild(item);
       });
 
-      // --- Nuevo: cargar Pokémon desde la API y mostrar igual (imagen en botón + nombre abajo) ---
-      async function loadGridFromApi(limit = 24) {
-        const API_BASE = "https://pokeapi.co/api/v2";
-        const grid = document.getElementById("grid-buttons");
-        grid.innerHTML = "Cargando Pokémon...";
+     async function loadGridFromApi(limit = 151) {
+  const grid = document.getElementById("grid-buttons");
+  const CACHE_KEY = "pokemon_cache";
+  const CACHE_TIME_KEY = "pokemon_cache_time";
+  const CACHE_DURATION = 1000 * 60 * 60 * 24; // 24 horas
 
-        try {
-          const resList = await fetch(`${API_BASE}/pokemon?limit=${limit}`);
-          const dataList = await resList.json();
+  // 1. Revisar si hay cache válido
+  const cached = localStorage.getItem(CACHE_KEY);
+  const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
 
-          // traer detalles en paralelo
-          const details = await Promise.all(
-            dataList.results.map(r => fetch(r.url).then(res => res.json()))
-          );
+  if (cached && cachedTime && (Date.now() - cachedTime < CACHE_DURATION)) {
+    console.log("Usando Pokémon desde el cache");
+    const pokemonList = JSON.parse(cached);
+    grid.innerHTML = "";
+    pokemonList.forEach(pkm => {
+      const item = createGridItem({ imgSrc: pkm.img, name: pkm.name, id: pkm.id });
+      grid.appendChild(item);
+    });
+    return;
+  }
 
-          grid.innerHTML = "";
-          details.forEach(data => {
-            const img = (data.sprites && (data.sprites.other?.["official-artwork"]?.front_default || data.sprites.front_default)) || "";
-            const item = createGridItem({ imgSrc: img, name: data.name, id: data.id });
-            grid.appendChild(item);
-          });
-        } catch (err) {
-          grid.innerHTML = "Error cargando Pokémon";
-          console.error(err);
-        }
-      }
+  // 2. Si no hay cache → sí llama a la API
+  grid.innerHTML = "Cargando Pokémon...";
+
+  try {
+    const resList = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}`);
+    const dataList = await resList.json();
+
+    const details = await Promise.all(
+      dataList.results.map(r => fetch(r.url).then(res => res.json()))
+    );
+
+    const processed = details.map(data => ({
+      id: data.id,
+      name: data.name,
+      img:
+        data.sprites?.other?.["official-artwork"]?.front_default ||
+        data.sprites?.front_default ||
+        ""
+    }));
+
+    // Guardar en localStorage
+    localStorage.setItem(CACHE_KEY, JSON.stringify(processed));
+    localStorage.setItem(CACHE_TIME_KEY, Date.now());
+
+    grid.innerHTML = "";
+    processed.forEach(pkm => {
+      const item = createGridItem({ imgSrc: pkm.img, name: pkm.name, id: pkm.id });
+      grid.appendChild(item);
+    });
+
+  } catch (err) {
+    console.error(err);
+    grid.innerHTML = "Error cargando Pokémon";
+  }
+}
+
 
       // Ejecutar carga al iniciar (comentario: si quieres mantener MOCK_POKEMON, comenta la siguiente línea)
-      loadGridFromApi(24);
+      loadGridFromApi(151);
     </script>
 
 </body>

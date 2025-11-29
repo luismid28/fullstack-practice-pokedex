@@ -1,7 +1,8 @@
 console.log("loadPokemons.js loaded!")
+
 async function loadPokemons() {
   const API_BASE = "https://pokeapi.co/api/v2";
-  const LIMIT = 24;
+  const LIMIT = 151;
 
   const grid = document.getElementById("pokemon-grid");
   grid.innerHTML = "Cargando Pokémon...";
