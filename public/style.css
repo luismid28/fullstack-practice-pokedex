@@ -1,0 +1,193 @@
+ * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+    * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            @keyframes moverFondo {
+                0% {
+                    background-position: 0 0, 10px 10px;
+                }
+                100% {
+                    background-position: 20px 20px, 30px 30px;
+                }
+            }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #ff6b6b;
+            background-image: radial-gradient(#e04f4f 20%, transparent 20%),
+                              radial-gradient(#e04f4f 20%, transparent 20%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            
+            animation: moverFondo 2s linear infinite;
+            
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+    *
+
+        .cuadro-formulario {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            
+            /* Estructura */
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            position: relative;
+            overflow: hidden; 
+            text-align: center;
+        }
+
+        .header-decorativo {
+            background-color: #ee1515; 
+            height: 100px;
+            width: 100%;
+            border-bottom: 5px solid #222224; 
+        }
+
+        .boton-centro {
+            position: absolute;
+            top: 75px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border: 5px solid #222224;
+            border-radius: 50%;
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .boton-centro::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            border: 2px solid #222224;
+            border-radius: 50%;
+        }
+
+        .contenido-form {
+            padding: 50px 40px 40px 40px; 
+        }
+
+        h1 {
+            color: #222224;
+            margin-bottom: 5px;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        h1 span {
+            color: #ee1515; 
+        }
+
+        p.subtitulo {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 25px;
+        }
+
+        
+        .grupo-input {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #222224;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            background-color: #fafafa;
+        }
+
+        input:focus {
+            border-color: #ee1515;
+            background-color: #fff;
+        }
+
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #ffde00; 
+            color: #3b4cca;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 0 #c7a008;
+            transition: transform 0.1s;
+        }
+
+        button:hover {
+            background-color: #ffe64d;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(2px);
+            box-shadow: none;
+        }
+        
+        
+        .login-link {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #777;
+        }
+
+        .login-link a {
+            color: #ee1515;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        #mensajeExito {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-radius: 10px;
+            font-weight: bold;
+            border: 1px solid #c8e6c9;
+        }
+
+       
+    

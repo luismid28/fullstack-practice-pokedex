@@ -15,15 +15,19 @@ body {
     padding: 30px;
     border-radius: 12px;
     text-align: center;
-    box-shadow: 0px 4px 18px rgba(0,0,0,0.3);
+    box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
 }
 
-input, button {
+input,
+button {
     width: 100%;
     padding: 10px;
     margin-top: 15px;
     border-radius: 8px;
     font-size: 1rem;
+
 }
 
 input {
@@ -37,26 +41,119 @@ button {
     cursor: pointer;
 }
 
-.input-formulario{
-     border: 2px solid #0013e6;
-
+.poke-header {
+    background: linear-gradient(180deg, #E60013 0%, #cc0011 100%);
+    margin: -30px -30px 10px -30px;
+    padding: 35px 20px 45px;
+    color: white;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
-.otra-clase{
+
+.poke-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background-color: #333;
+}
+
+.poke-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.poke-header p {
+    margin: 5px 0 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+.poke-badge {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border: 8px solid #333;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.input-wrapper input {
+    margin-top: 0 !important;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-wrapper i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+    z-index: 2;
+    transition: color 0.3s;
+}
+
+.input-wrapper:focus-within i {
+    color: #E60013;
+}
+
+.input-wrapper input:focus {
+    box-shadow: 0 0 0 4px rgba(118, 219, 101, 0.2);
+    border-color: #5ac448;
+}
+
+.input-wrapper .input-formulario:focus {
+    box-shadow: 0 0 0 4px rgba(0, 19, 230, 0.2);
+}
+
+
+.container button {
+    margin-top: 25px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    transition: transform 0.2s, background-color 0.2s;
+    box-shadow: 0 4px 6px rgba(230, 0, 19, 0.3);
+}
+
+.container button:hover {
+    background-color: #c20010;
+    transform: translateY(-2px);
+}
+
+
+
+
+
+
+
+
+.otra-clase {
     background-color: #e37bc9;
     border: 2px solid black;
 }
+
 #pokemon-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
 }
 
 .pokemon-card {
-  background: white;
-  padding: 12px;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    background: white;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-

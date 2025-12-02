@@ -1,19 +1,86 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Registro Usuario</title>
-      <link rel="stylesheet" href="css/styles.css" />
-  </head>
-  <body>
-    
-    <h1>Users</h1>
-    <input type="text"
-    class="input-formulario"/>
-    
-    
-    <div id="users-root"></div>
-    <script src="js/users.js"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PokéDeck ID - Registro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="cuadro-formulario">
+        
+        
+        <div class="header-decorativo"></div>
+        <div class="boton-centro"></div>
+
+        
+        <div class="contenido-form">
+            <h1>Poké<span>Deck</span> ID</h1>
+            <p class="subtitulo">Comienza tu aventura de entrenador</p>
+
+            <form id="formRegistro">
+                <div class="grupo-input">
+                    <label for="nombre">Nombre de Entrenador</label>
+                    <input type="text" id="nombre" placeholder="Ej: Ash Ketchum" required>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="correo">Correo Electrónico</label>
+                    <input type="email" id="correo" placeholder="ash@pueblopaleta.com" required>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="usuario">Usuario (Nick)</label>
+                    <input type="text" id="usuario" placeholder="Ej: MaestroPokemon_97" required>
+                </div>
+
+                <button type="submit">Obtener ID</button>
+            </form>
+
+            <div id="mensajeExito">
+                ¡Registro completado! <br> Bienvenido, <span id="nombreUsuarioMostrado"></span>.
+            </div>
+
+            <div class="login-link">
+                ¿Ya tienes cuenta? <a href="index.html">Inicia sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const formulario = document.getElementById('formRegistro');
+        const mensajeExito = document.getElementById('mensajeExito');
+        const spanUsuario = document.getElementById('nombreUsuarioMostrado');
+        const loginLink = document.querySelector('.login-link');
+
+        formulario.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const usuario = document.getElementById('usuario').value;
+
+          
+            formulario.style.display = 'none';
+            document.querySelector('.subtitulo').style.display = 'none'; 
+            if(loginLink) loginLink.style.display = 'none';
+            
+            document.querySelector('h1').innerText = '¡Felicidades!';
+            document.querySelector('h1').style.color = '#ee1515';
+            
+            spanUsuario.innerText = usuario;
+            mensajeExito.style.display = 'block';
+
+            
+            setTimeout(function() {
+                window.location.href = 'decks.html';
+            }, 2000);
+        });
+    </script>
+
+
+
+  
+
+
+  
+</body>
 </html>
