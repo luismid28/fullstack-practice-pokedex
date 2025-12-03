@@ -1,13 +1,401 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Pokedeck - Deck Detail</title>
-  </head>
-  <body>
-    <h1>Deck Detail</h1>
-    <div id="deck-detail-root"></div>
-    <script src="/js/decks.js"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Decks de Pokémon (Solo Pokémon)</title>
+    <style>
+        /* ================================================= */
+        /* CSS: Estilos */
+        /* ================================================= */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #e5e5f7; /* Fondo ligero */
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #ffcc00; /* Amarillo Pikachu */
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px #3b4cca;
+        }
+
+        /* --- Pestañas de Navegación --- */
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ccc;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: #f0f0f0;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            margin-right: 5px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .tab-button.active {
+            background-color: #3b4cca;
+            color: white;
+            border-bottom: 2px solid #3b4cca;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px 0;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* --- Estilos de las Tablas de Decks --- */
+        .deck-card {
+            border: 2px solid #3b4cca;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background-color: #e6e6fa; /* Lila muy suave */
+        }
+        .deck-card h3 {
+            color: #cc0000;
+            border-bottom: 2px dashed #cc0000;
+            padding-bottom: 5px;
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #3b4cca;
+            color: white;
+        }
+
+        /* --- Estilos de la Sección Crear Deck --- */
+        #create-deck-form {
+            display: flex;
+            gap: 20px;
+        }
+        #card-input-section {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff8e1; /* Amarillo pálido */
+        }
+        #deck-list-section {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #e8f5e9; /* Verde pálido */
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #add-card-btn {
+            background-color: #4CAF50; /* Verde */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        #add-card-btn:hover {
+            background-color: #45a049;
+        }
+        #deck-output {
+            margin-top: 15px;
+            border-top: 1px dashed #ccc;
+            padding-top: 10px;
+        }
+        .card-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px dotted #aaa;
+        }
+        .card-entry button {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 3px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Decks </h1>
+        
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab('view-decks')">Ver 5 Decks Predefinidos</button>
+            <button class="tab-button" onclick="openTab('create-deck')">Crear Lista de Pokémon</button>
+        </div>
+
+        <div id="view-decks" class="tab-content active">
+
+            <div class="deck-card">
+                <h3>🔥 Deck 1: TYPE FIRE</h3>
+                <table>
+                    <thead>
+                        <tr><th>Cant.</th><th>Nombre del Pokémon</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>3</td><td>Charizard</td></tr>
+                        <tr><td>3</td><td>Charmeleon</td></tr>
+                        <tr><td>4</td><td>Charmander (Energía Creciente)</td></tr>
+                        <tr><td>2</td><td>Moltres</td></tr>
+                        <tr><td>2</td><td>Magmar</td></tr>
+                        <tr><td>2</td><td>Ponyta</td></tr>
+                        <tr><td>2</td><td>Rapidash</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="deck-card">
+                <h3>💧 Deck 2: TYPE WATER EX</h3>
+                <table>
+                    <thead>
+                        <tr><th>Cant.</th><th>Nombre del Pokémon</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>3</td><td>Chien-Pao ex</td></tr>
+                        <tr><td>3</td><td>Baxcalibur</td></tr>
+                        <tr><td>3</td><td>Frigibax</td></tr>
+                        <tr><td>2</td><td>Kirlia</td></tr>
+                        <tr><td>2</td><td>Radiant Greninja</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="deck-card">
+                <h3>⚡ Deck 3: Miraidon EX</h3>
+                <table>
+                    <thead>
+                        <tr><th>Cant.</th><th>Nombre del Pokémon</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>3</td><td>Miraidon ex</td></tr>
+                        <tr><td>3</td><td>Regieleki VMAX</td></tr>
+                        <tr><td>3</td><td>Regieleki V</td></tr>
+                        <tr><td>2</td><td>Raikou V</td></tr>
+                        <tr><td>1</td><td>Zapdos</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="deck-card">
+                <h3>🌿 Deck 4: Gardevoir EX</h3>
+                <table>
+                    <thead>
+                        <tr><th>Cant.</th><th>Nombre del Pokémon</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>3</td><td>Gardevoir ex</td></tr>
+                        <tr><td>3</td><td>Kirlia</td></tr>
+                        <tr><td>3</td><td>Ralts</td></tr>
+                        <tr><td>2</td><td>Screaming Tail</td></tr>
+                        <tr><td>1</td><td>Cresselia</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="deck-card">
+                <h3>⚫ Deck 5: Darkrai VSTAR</h3>
+                <table>
+                    <thead>
+                        <tr><th>Cant.</th><th>Nombre del Pokémon</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>3</td><td>Darkrai VSTAR</td></tr>
+                        <tr><td>3</td><td>Darkrai V</td></tr>
+                        <tr><td>4</td><td>Sableye</td></tr>
+                        <tr><td>2</td><td>Umbreon VMAX</td></tr>
+                        <tr><td>2</td><td>Radiant Charizard</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <div id="create-deck" class="tab-content">
+            <h2>✏️ Lista de Pokémon para tu Deck (Máx. 60)</h2>
+            
+            <div id="create-deck-form">
+                
+                <div id="card-input-section">
+                    <h3>Añadir Pokémon</h3>
+                    <div class="input-group">
+                        <label for="card-qty">Cantidad:</label>
+                        <input type="number" id="card-qty" value="1" min="1" max="4" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="card-name">Nombre del Pokémon:</label>
+                        <input type="text" id="card-name" placeholder="Ej: Pidgey, Arceus VSTAR" required>
+                    </div>
+                    <button id="add-card-btn" onclick="addCard()">➕ Añadir Pokémon a la Lista</button>
+                    <p style="margin-top: 15px; font-size: 0.9em;">**Nota:** Una carta Pokémon puede tener un máximo de 4 copias en un deck.</p>
+                </div>
+                
+                <div id="deck-list-section">
+                    <h3>Mi Lista de Pokémon Actual</h3>
+                    <p>Total de Cartas: <strong id="total-cards">0</strong> / 60</p>
+                    <div id="deck-output">
+                        </div>
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // ----------------------------------------------------
+        // 1. Lógica de Pestañas (Tabs)
+        // ----------------------------------------------------
+        function openTab(tabId) {
+            // Oculta todos los contenidos de las pestañas
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Desactiva todos los botones
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Muestra el contenido de la pestaña seleccionada
+            document.getElementById(tabId).classList.add('active');
+            
+            // Activa el botón de la pestaña seleccionada
+            document.querySelector(`.tab-button[onclick="openTab('${tabId}')"]`).classList.add('active');
+        }
+
+        // ----------------------------------------------------
+        // 2. Lógica para Crear el Deck
+        // ----------------------------------------------------
+        let deckList = [];
+        let totalCards = 0;
+
+        function updateTotals() {
+            totalCards = deckList.reduce((sum, card) => sum + card.qty, 0);
+            document.getElementById('total-cards').textContent = totalCards;
+        }
+
+        function renderDeck() {
+            const output = document.getElementById('deck-output');
+            output.innerHTML = ''; // Limpiar la lista actual
+            
+            // Ordenar por nombre de carta para mejor visualización
+            const sortedDeck = [...deckList].sort((a, b) => a.name.localeCompare(b.name));
+
+            sortedDeck.forEach((card, index) => {
+                const entry = document.createElement('div');
+                entry.classList.add('card-entry');
+                // Usamos card.name y card.qty (ya que card.type es siempre Pokémon)
+                entry.innerHTML = `
+                    <span>
+                        <strong style="color: #3b4cca;">(${card.qty})</strong> ${card.name}
+                    </span>
+                    <button onclick="removeCard(${index})">Eliminar</button>
+                `;
+                output.appendChild(entry);
+            });
+
+            updateTotals();
+        }
+
+        function addCard() {
+            const qty = parseInt(document.getElementById('card-qty').value);
+            const name = document.getElementById('card-name').value.trim();
+            
+            // **IMPORTANTE**: Tipo se fija a "Pokémon" según la solicitud del usuario
+            const type = "Pokémon"; 
+
+            if (name === "" || qty <= 0 || isNaN(qty)) {
+                alert("Por favor, ingresa un nombre de Pokémon y una cantidad válida (1-4).");
+                return;
+            }
+            
+            // Regla TCG: Máximo 4 copias de la misma carta (excepto energías básicas, pero aquí solo es Pokémon)
+            if (qty > 4) {
+                 alert("Solo puedes añadir un máximo de 4 copias del mismo Pokémon a la vez.");
+                 return;
+            }
+
+            if (totalCards + qty > 60) {
+                alert("¡El total de cartas no puede exceder las 60!");
+                return;
+            }
+
+            // Buscar si el Pokémon ya existe
+            const existingIndex = deckList.findIndex(card => card.name.toLowerCase() === name.toLowerCase());
+
+            if (existingIndex !== -1) {
+                // Verificar si al sumar la cantidad se excede el límite de 4
+                if (deckList[existingIndex].qty + qty > 4) {
+                    alert(`El Pokémon ${name} ya tiene ${deckList[existingIndex].qty} copias. Solo puedes tener 4 en total.`);
+                    return;
+                }
+                // Actualizar cantidad si ya existe
+                deckList[existingIndex].qty += qty;
+            } else {
+                // Agregar nuevo Pokémon
+                deckList.push({ qty, name, type });
+            }
+
+            // Limpiar campos de entrada
+            document.getElementById('card-name').value = '';
+            document.getElementById('card-qty').value = '1';
+
+            renderDeck();
+        }
+
+        function removeCard(index) {
+            deckList.splice(index, 1); // Eliminar el Pokémon del array
+            renderDeck();
+        }
+
+        // Se ejecuta al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDeck();
+        });
+    </script>
+
+</body>
 </html>
