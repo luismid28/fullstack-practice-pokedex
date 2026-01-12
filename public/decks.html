@@ -1,13 +1,201 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Pokedeck - Decks</title>
-  </head>
-  <body>
-    <h1>Decks</h1>
-    <div id="decks-root"></div>
-    <script src="/js/decks.js"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header con Botones Desplazables</title>
+    <link rel="stylesheet" href="decks_styles.css">
+    <!-- La hoja de estilos externa decks_styles.css ya contiene
+         display: flex para .button-container, por lo que el
+         style tag de aquí se puede omitir. -->
+</head>
+<body>
+
+    <header class="scrollable-header">
+        <div id="header-buttons" class="button-container">
+            <!-- Los botones del header se generan por JS -->
+        </div>
+    </header>
+
+    <main>
+        <section class="grid-container">
+          <h2>Galería de Pokémon</h2>
+          <div id="grid-buttons" class="grid-buttons">
+            <!-- Los botones de la cuadrícula se generan por JS -->
+          </div>
+        </section>
+    </main>
+
+    <script>
+      // Configuración: cambia estos valores si quieres más/menos botones
+      const HEADER_COUNT = 8;   // botones en el header
+      const GRID_COUNT = 60;    // botones en la cuadricula
+
+      // Mazos de ejemplo (del mock)
+      const MOCK_DECKS = [
+        {
+          id: 1,
+          nombre: "Equipo inicial",
+          userId: 1,
+          pokémonIds: [1, 4, 7, 25],
+          estadísticas: {
+            totalAtaque: 49 + 52 + 48 + 55,
+            totalHp: 45 + 39 + 44 + 35
+          }
+        },
+        {
+          id: 2,
+          nombre: "Equipo fuego",
+          userId: 1,
+          pokémonIds: [4, 4, 4, 25],
+          estadísticas: {
+            totalAtaque: 52 * 3 + 55,
+            totalHp: 39 * 3 + 35
+          }
+        }
+      ];
+
+      // Pokémon de ejemplo
+      const MOCK_POKEMON = [
+        {
+          id: 1,
+          nombre: "bulbasaur",
+          tipos: ["planta", "veneno"],
+          sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
+          estadísticas: { hp: 45, ataque: 49, defensa: 49, velocidad: 45 }
+        },
+        {
+          id: 4,
+          nombre: "charmander",
+          tipos: ["fuego"],
+          sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png",
+          estadísticas: { hp: 39, ataque: 52, defensa: 43, velocidad: 65 }
+        },
+        {
+          id: 7,
+          nombre: "squirtle",
+          tipos: ["agua"],
+          sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png",
+          estadísticas: { hp: 44, ataque: 48, defensa: 65, velocidad: 43 }
+        },
+        {
+          id: 25,
+          nombre: "pikachu",
+          tipos: ["eléctrico"],
+          sprite: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
+          estadísticas: { hp: 35, ataque: 55, defensa: 40, velocidad: 90 }
+        }
+      ];
+
+      // Generar botones del header con los nombres de los mazos
+      const headerContainer = document.getElementById('header-buttons');
+      MOCK_DECKS.forEach((deck) => {
+        const btn = document.createElement('button');
+        btn.className = 'nav-button';
+        btn.innerHTML = `<span style="display: flex; flex-direction: column; align-items: center; gap: 4px;"><span>${deck.nombre}</span></span>`;
+        headerContainer.appendChild(btn);
+      });
+
+      // Medir el primer botón para que el botón "+" tenga las mismas dimensiones
+      const firstButton = headerContainer.querySelector('.nav-button');
+      let buttonWidth = 'auto';
+      let buttonHeight = 'auto';
+      if (firstButton) {
+        const styles = window.getComputedStyle(firstButton);
+        buttonWidth = styles.width;
+        buttonHeight = styles.height;
+      }
+
+      // Crear y agregar el botón "+" al final
+      const addButton = document.createElement('button');
+      addButton.className = 'nav-button';
+      addButton.innerHTML = `<span style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 1.5rem;">+</span>`;
+      Object.assign(addButton.style, {
+        width: buttonWidth,
+        height: buttonHeight,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      });
+      headerContainer.appendChild(addButton);
+
+      // Generar botones de la cuadricula con Pokémon de ejemplo
+      const gridContainer = document.getElementById('grid-buttons');
+
+      // Helper para crear un "grid item" con botón (solo imagen) y etiqueta debajo
+      function createGridItem({ imgSrc, name, id }) {
+        const item = document.createElement('div');
+        item.className = 'grid-item';
+        item.style.display = 'flex';
+        item.style.flexDirection = 'column';
+        item.style.alignItems = 'center';
+        item.style.gap = '6px';
+
+        const btn = document.createElement('button');
+        btn.className = 'grid-button';
+        btn.style.display = 'flex';
+        btn.style.alignItems = 'center';
+        btn.style.justifyContent = 'center';
+        btn.style.padding = '0';
+        btn.style.width = '100%';
+        btn.style.height = 'auto';
+
+        const img = document.createElement('img');
+        img.src = imgSrc || '';
+        img.alt = name || '';
+        img.style.width = '60%';
+        img.style.height = 'auto';
+        img.style.imageRendering = 'pixelated';
+        btn.appendChild(img);
+
+        const label = document.createElement('div');
+        label.className = 'grid-label';
+        label.textContent = name ? String(name).toLowerCase() : '';
+        label.style.fontSize = '0.9rem';
+        label.style.textTransform = 'capitalize';
+
+        item.appendChild(btn);
+        item.appendChild(label);
+
+        return item;
+      }
+
+      // Poblamos con MOCK_POKEMON primero
+      MOCK_POKEMON.forEach((pokemon) => {
+        const item = createGridItem({ imgSrc: pokemon.sprite, name: pokemon.nombre, id: pokemon.id });
+        gridContainer.appendChild(item);
+      });
+
+      // --- Nuevo: cargar Pokémon desde la API y mostrar igual (imagen en botón + nombre abajo) ---
+      async function loadGridFromApi(limit = 24) {
+        const API_BASE = "https://pokeapi.co/api/v2";
+        const grid = document.getElementById("grid-buttons");
+        grid.innerHTML = "Cargando Pokémon...";
+
+        try {
+          const resList = await fetch(`${API_BASE}/pokemon?limit=${limit}`);
+          const dataList = await resList.json();
+
+          // traer detalles en paralelo
+          const details = await Promise.all(
+            dataList.results.map(r => fetch(r.url).then(res => res.json()))
+          );
+
+          grid.innerHTML = "";
+          details.forEach(data => {
+            const img = (data.sprites && (data.sprites.other?.["official-artwork"]?.front_default || data.sprites.front_default)) || "";
+            const item = createGridItem({ imgSrc: img, name: data.name, id: data.id });
+            grid.appendChild(item);
+          });
+        } catch (err) {
+          grid.innerHTML = "Error cargando Pokémon";
+          console.error(err);
+        }
+      }
+
+      // Ejecutar carga al iniciar (comentario: si quieres mantener MOCK_POKEMON, comenta la siguiente línea)
+      loadGridFromApi(24);
+    </script>
+
+</body>
 </html>
